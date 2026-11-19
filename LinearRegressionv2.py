@@ -66,8 +66,13 @@ class LinearRegression:
                 print(f"Epoch {j}:", x)
 
 
-data_test = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-target_test = [(3 * num) + 4 for num in data_test]
+# Generates 20 pairs of independent random numbers between 1 and 20
+data_test = [[random.randint(1, 20)] for _ in range(20)]
+grads = [random.randint(1, 20), random.randint(1, 20)]
+target_test = [(grads[0] * num[0]) + grads[1] for num in data_test]
+
+print(f"Target is {target_test}")
+print(f"Target is generated using gradient {grads[0]} and with y-intercept {grads[1]}")
 print("Target is", target_test)
 model = LinearRegression()
 model.fit(data_test, target_test)
