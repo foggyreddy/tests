@@ -22,4 +22,11 @@ class LinearRegression:
         self.steps = steps
 
 
-class LogisticalRegression
+class LogisticalRegression():
+
+data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+target = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+
+sample = LinearRegression()
+sample.fit(data, target)
+sample
