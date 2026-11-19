@@ -9,11 +9,13 @@ class LinearRegression:
         self.data = []
         self.target = []
         self.iterations = 1_000_000
-        self.steps = 0.0001
+        self.steps = 0.01
         self.dimens = 1
         self.temp = 0.1
 
     def allow(self, delta_loss):
+        if self.temp < 1e-10:
+            return False
         x = math.exp(
             -delta_loss / self.temp
         )  # This is the Boltzmann probability function: \(P = \exp(-\Delta \text{Loss} / T)\).
@@ -95,39 +97,26 @@ class LinearRegression:
             if j % 10 == 0:
                 self.temp *= 0.999
             if j % 100_000 == 0:
-
+                self.steps *= 0.99
                 if x == [round(self.pred(i), 3) for i in self.data]:
                     break
                 x = [round(self.pred(i), 3) for i in self.data]
                 print(f"Epoch {j}:", x)
-            self.steps *= 0.999
 
 
-data_test = [
-    [1, 2],
-    [2, 3],
-    [3, 4],
-    [4, 5],
-    [5, 6],
-    [6, 7],
-    [7, 8],
-    [8, 9],
-    [9, 10],
-    [10, 11],
-    [11, 12],
-    [12, 13],
-    [13, 14],
-    [14, 15],
-    [15, 16],
-    [16, 17],
-    [17, 18],
-    [18, 19],
-    [19, 20],
+# Generates 20 pairs of independent random numbers between 1 and 20
+data_test = [[random.randint(1, 20), random.randint(1, 20)] for _ in range(20)]
+grads = [random.randint(1, 20), random.randint(1, 20), random.randint(1, 20)]
+target_test = [
+    ((grads[0] * num[0]) + (grads[1] * num[1])) + grads[2] for num in data_test
 ]
-target_test = [((8 * num[0]) + (1 * num[1])) + 3 for num in data_test]
-print("Target is", target_test)
+
+print(f"Target is {target_test}")
+print(
+    f"Target is generated using gradients {grads[0]} and {grads[1]} with y-intercept {grads[2]}"
+)
 model = LinearRegression()
 model.fit(data_test, target_test)
 print(
-    f"Possible gradients are {model.gradients}, y-intercept is {round(model.intercept,2)}"
+    f"Possible gradients are {round(model.gradients[0], 2)} and {round(model.gradients[1], 2)} with the y-intercept as {round(model.intercept,2)}"
 )
